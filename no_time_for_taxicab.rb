@@ -61,6 +61,8 @@ We need a concept of direction to help figure out the starting and endpoint give
 
 =end
 
+
+# The location represents a point in the city-grid (x,y) coordinate-system.
 class Location
     attr_accessor :x, :y
 
@@ -70,21 +72,26 @@ class Location
     end
 end
 
+# Finds the easter bunny using the recruitment file, initial drop off point and initial facing direction (compass naviation N,S,E,W)
 def find_bunny(easter_bunny_recruit_doc, origin, facing)
-
-    distance = 0
 
     if !easter_bunny_recruit_doc
         puts "blank file."
         return
     end
 
+    distance = 0
+
     commands = []
+
+    # abstract this
     File.open(easter_bunny_recruit_doc).each do |line|
         commands = line.split(",")
     end
 
     destination = Location.new(origin.x, origin.y)
+
+    # abstract this
     commands.each do |c|
 
         direction = ""
@@ -140,6 +147,7 @@ def find_bunny(easter_bunny_recruit_doc, origin, facing)
 
         # distance = destination - origin
 
+        # abstract this
         distance = (destination.x - origin.x).abs + (destination.y - origin.y).abs
         p "distance: #{distance}"
     end
