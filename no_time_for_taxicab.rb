@@ -61,10 +61,93 @@ We need a concept of direction to help figure out the starting and endpoint give
 
 =end
 
+class Location
+    attr_accessor :x, :y
 
+    def initialize(x,y)
+        @x = x
+        @y = y
+    end
+end
 
+def find_bunny(easter_bunny_recruit_doc, origin, facing)
 
+    distance = 0
 
+    if !easter_bunny_recruit_doc
+        puts "blank file."
+        return
+    end
 
+    commands = []
+    File.open(easter_bunny_recruit_doc).each do |line|
+        commands = line.split(",")
+    end
 
+    destination = Location.new(origin.x, origin.y)
+    commands.each do |c|
 
+        direction = ""
+        blocks = ""
+
+        if c.strip().length > 0
+            direction = /\w/.match(c.strip())
+            blocks = /\d+$/.match(c)
+
+        end
+
+        p "direction: #{direction} blocks: #{blocks}"
+        direction = direction[0].to_s
+        blocks = blocks[0].to_i
+
+        p "origin #{origin.inspect}"
+    
+        if facing == "N" && direction == "R"
+            facing = "E"
+            # add x-axis
+            destination.x += blocks
+        elsif facing == "N" && direction == "L"
+            facing = "W"
+            # subtract x-axis
+            destination.x -= blocks
+        elsif facing == "S" && direction == "R"
+            facing = "W"
+            # subtract x-axis
+            destination.x -= blocks
+        elsif facing == "S" && direction == "L"
+            facing = "E"
+            # add x-axis
+            destination.x += blocks
+        elsif facing == "E" && direction == "R"
+            facing = "S"
+            # subtract y-axis
+            destination.y -= blocks
+        elsif facing == "E" && direction == "L"
+            facing = "N"
+            # add y-axis
+            destination.y += blocks
+        elsif facing == "W" && direction == "R"
+            facing = "N"
+            # add y-axis
+            destination.y += blocks
+        elsif facing == "W" && direction == "L"
+            facing = "S"
+            # subtract y-axis
+            destination.y -= blocks
+        end
+
+        p "destination: #{destination.inspect}"
+
+        # distance = destination - origin
+
+        distance = (destination.x - origin.x).abs + (destination.y - origin.y).abs
+        p "distance: #{distance}"
+    end
+end
+
+easter_bunny_recruit_doc = "./input.txt"
+drop_off_point = Location.new(0,0)
+facing = "N"
+
+distance = find_bunny(easter_bunny_recruit_doc, drop_off_point, facing)
+p "distance: #{distance}"
