@@ -78,6 +78,10 @@ def extract_commands(easter_bunny_recruit_doc)
     end
 end
 
+def extract_pattern(regex, str)
+    return regex.match(str.strip())
+end
+
 def coordinate_system_mover(commands, origin, facing)
 
     destination = Location.new(origin.x, origin.y)
@@ -89,9 +93,8 @@ def coordinate_system_mover(commands, origin, facing)
         blocks = ""
 
         if c.strip().length > 0
-            direction = /\w/.match(c.strip())
-            blocks = /\d+$/.match(c)
-
+            direction = extract_pattern(/\w/, c)
+            blocks = extract_pattern(/\d+$/, c)
         end
 
         direction = direction[0].to_s
