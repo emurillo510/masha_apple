@@ -73,12 +73,21 @@ class Location
 end
 
 def extract_commands(easter_bunny_recruit_doc)
+
+    if IO.readlines(easter_bunny_recruit_doc).size != 1
+        raise Exception.new "file not in correct format"
+    end
+
     File.open(easter_bunny_recruit_doc).each do |line|
         return line.split(",")
     end
 end
 
 def extract_pattern(regex, str)
+
+    if str.strip().length == 0
+        raise Exception.new "Empty string"
+    end
     return regex.match(str.strip())
 end
 
@@ -86,7 +95,6 @@ def coordinate_system_mover(commands, origin, facing)
 
     destination = Location.new(origin.x, origin.y)
 
-    # abstract this
     commands.each do |c|
 
         direction = ""
@@ -102,35 +110,35 @@ def coordinate_system_mover(commands, origin, facing)
     
         if facing == "N" && direction == "R"
             facing = "E"
-            # add x-axis
+
             destination.x += blocks
         elsif facing == "N" && direction == "L"
             facing = "W"
-            # subtract x-axis
+
             destination.x -= blocks
         elsif facing == "S" && direction == "R"
             facing = "W"
-            # subtract x-axis
+
             destination.x -= blocks
         elsif facing == "S" && direction == "L"
             facing = "E"
-            # add x-axis
+
             destination.x += blocks
         elsif facing == "E" && direction == "R"
             facing = "S"
-            # subtract y-axis
+
             destination.y -= blocks
         elsif facing == "E" && direction == "L"
             facing = "N"
-            # add y-axis
+
             destination.y += blocks
         elsif facing == "W" && direction == "R"
             facing = "N"
-            # add y-axis
+
             destination.y += blocks
         elsif facing == "W" && direction == "L"
             facing = "S"
-            # subtract y-axis
+
             destination.y -= blocks
         end
     end
@@ -158,10 +166,3 @@ def find_bunny(easter_bunny_recruit_doc, origin, facing)
 
     return distance
 end
-
-easter_bunny_recruit_doc = "./input.txt"
-drop_off_point = Location.new(0,0)
-facing = "N"
-
-distance = find_bunny(easter_bunny_recruit_doc, drop_off_point, facing)
-p "distance: #{distance}"
