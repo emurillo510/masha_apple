@@ -72,22 +72,13 @@ class Location
     end
 end
 
-# Finds the easter bunny using the recruitment file, initial drop off point and initial facing direction (compass naviation N,S,E,W)
-def find_bunny(easter_bunny_recruit_doc, origin, facing)
-
-    if !easter_bunny_recruit_doc
-        puts "blank file."
-        return
-    end
-
-    distance = 0
-
-    commands = []
-
-    # abstract this
+def extract_commands(easter_bunny_recruit_doc)
     File.open(easter_bunny_recruit_doc).each do |line|
-        commands = line.split(",")
+        return line.split(",")
     end
+end
+
+def coordinate_system_mover(commands, origin, facing)
 
     destination = Location.new(origin.x, origin.y)
 
@@ -103,11 +94,8 @@ def find_bunny(easter_bunny_recruit_doc, origin, facing)
 
         end
 
-        p "direction: #{direction} blocks: #{blocks}"
         direction = direction[0].to_s
         blocks = blocks[0].to_i
-
-        p "origin #{origin.inspect}"
     
         if facing == "N" && direction == "R"
             facing = "E"
@@ -142,15 +130,30 @@ def find_bunny(easter_bunny_recruit_doc, origin, facing)
             # subtract y-axis
             destination.y -= blocks
         end
-
-        p "destination: #{destination.inspect}"
-
-        # distance = destination - origin
-
-        # abstract this
-        distance = (destination.x - origin.x).abs + (destination.y - origin.y).abs
-        p "distance: #{distance}"
     end
+    return destination
+end
+
+def city_grid_distance(origin, destination)
+    return (destination.x - origin.x).abs + (destination.y - origin.y).abs
+end
+
+# Finds the easter bunny using the recruitment file, initial drop off point and initial facing direction (compass naviation N,S,E,W)
+def find_bunny(easter_bunny_recruit_doc, origin, facing)
+
+    if easter_bunny_recruit_doc.empty?
+        raise "file is empty."
+    end
+
+    distance = 0
+
+    commands = extract_commands(easter_bunny_recruit_doc)
+
+    destination = coordinate_system_mover(commands, origin, facing)
+
+    distance = city_grid_distance(origin, destination)
+
+    return distance
 end
 
 easter_bunny_recruit_doc = "./input.txt"
