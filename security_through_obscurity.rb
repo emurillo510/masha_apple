@@ -77,7 +77,7 @@ def is_valid_room(encrypted_name, sector_id, checksum)
         end
     end
 
-    occurences = Hash[occurences.sort]
+    occurences = Hash[occurences.sort_by{|k, v| -v}]
 
     for idx in 0..checksum.length - 1
         if occurences.keys[idx] != checksum[idx]
@@ -89,7 +89,16 @@ def is_valid_room(encrypted_name, sector_id, checksum)
 end
 
 def sum_of_sector_ids(rooms)
-    return 0
+
+    sum = 0
+    rooms.each do |r|
+        room_details = extract_coding(r)
+        if is_valid_room(room_details.encrypted_name, room_details.sector_id, room_details.checksum) == true
+            sum += room_details.sector_id
+        end
+    end
+
+    return sum 
 end
 
 output = extract_coding("totally-real-room-200[decoy]")
