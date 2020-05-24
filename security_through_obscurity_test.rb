@@ -33,9 +33,9 @@ end
 
 def test_is_valid_room_valid()
 
-    encrypted_name = ["aaaaa", "bbb", "z", "y", "x"]
-    sector_id = 123
-    checksum = "abxyz"
+    encrypted_name = ["not", "a", "real", "room"]
+    sector_id = 404
+    checksum = "oarel"
 
     output = is_valid_room(encrypted_name, sector_id, checksum)
 
@@ -66,3 +66,4 @@ test_is_valid_room_valid()
 test_is_valid_room_invalid()
 test_sum_of_sector_id()
 puts "Completed."
+
