@@ -4,11 +4,21 @@
 
 You come upon a factory in which many robots are zooming around handing small microchips to each other.
 
-Upon closer examination, you notice that each bot only proceeds when it has two microchips, and once it does, it gives each one to a different bot or puts it in a marked "output" bin. Sometimes, bots take microchips from "input" bins, too.
+Upon closer examination, you notice that each bot only proceeds when it has two microchips, and once it does, it gives each one to a different bot 
 
-Inspecting one of the microchips, it seems like they each contain a single number; the bots must use some logic to decide what to do with each chip. You access the local control computer and download the bots' instructions (your puzzle input).
+or puts it in a marked "output" bin. Sometimes, bots take microchips from "input" bins, too.
 
-Some of the instructions specify that a specific-valued microchip should be given to a specific bot; the rest of the instructions indicate what a given bot should do with its lower-value or higher-value chip.
+
+Inspecting one of the microchips, it seems like they each contain a single number; 
+
+the bots must use some logic to decide what to do with each chip. 
+    
+
+You access the local control computer and download the bots' instructions (your puzzle input).
+
+Some of the instructions specify that a specific-valued microchip should be given to a specific bot; 
+
+the rest of the instructions indicate what a given bot should do with its lower-value or higher-value chip.
 
 For example, consider the following instructions:
 
@@ -29,6 +39,40 @@ In the end, output bin 0 contains a value-5 microchip, output bin 1 contains a v
 Based on your instructions, what is the number of the bot that is responsible for comparing value-61 microchips with value-17 microchips?
 
 
-
-
 =end
+
+def extract_coding(str)
+    
+    value_fmt = /^value (\d+) goes to bot (\d+)$/
+    rule_fmt = /^bot (\d+) gives low to (output|bot) (\d+) and high to (output|bot) (\d+)$/
+    
+    if str.empty?
+        return
+    end
+
+    if value_fmt.match(str)
+        return value_fmt.match(str)
+    else
+        return rule_fmt.match(str)
+    end
+end
+
+def process_instructions(instruction)
+
+    output = extract_coding(instruction)
+    p output
+    p "#{output[1]} #{output[3]}"
+end
+
+def solve()
+
+    file = File.open("./input3.txt").read
+    instructions = file.split("\n")
+
+    instructions.each do |i|
+        process_instructions(i)
+    end
+end
+
+solve()
+

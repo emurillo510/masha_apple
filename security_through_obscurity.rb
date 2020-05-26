@@ -77,14 +77,16 @@ def is_valid_room(encrypted_name, sector_id, checksum)
         end
     end
 
-    occurences = Hash[occurences.sort_by{|k, v| -v}]
+    occurences = Hash[occurences.sort_by{|k, v| [-v,k]}]
 
     for idx in 0..checksum.length - 1
         if occurences.keys[idx] != checksum[idx]
+            #p occurences
+            #p checksum
             return false
         end
     end
-
+    
     return true
 end
 
@@ -101,6 +103,11 @@ def sum_of_sector_ids(rooms)
     return sum 
 end
 
-output = extract_coding("totally-real-room-200[decoy]")
+def solve()
+    file = File.open("./input2.txt").read
+    rooms = file.split(" ")
+    output = sum_of_sector_ids(rooms)
+    p output
+end
 
-p output
+solve()
