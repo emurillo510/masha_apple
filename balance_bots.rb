@@ -64,30 +64,6 @@ class Robot
         end
 
         return false
-
-=begin
-        if @value_storage.size() == 2
-            @instructions.each do |cmd|
-                cmd.each do |c|
-                    if c.value == "LOW"
-                        value = @value_storage[1]
-                        robot = c.dest
-                        #p "value: #{value.value}"
-                        #p "robot: #{robot}"
-                        @controller.receive_update(value, robot)
-                    else
-                        value = @value_storage[0]
-                        robot = c.dest
-                        #p "value: #{value.value}"
-                        #p "robot: #{robot}"
-                        @controller.receive_update(value, robot)
-                    end
-                end
-            end
-        end
-=end
-
-        #p "@id: #{@id} @value_storage: #{@value_storage}"
     end
 
     def get_value(command)
@@ -102,21 +78,6 @@ class Robot
         @instructions.push(token)
     end
 end
-
-=begin
-class Value
-    attr_accessor :robot_history, :value
-
-    def initialize(value)
-        @value = value
-        @robot_history = []
-    end
-
-    def update_history(robot_id)
-        @robot_history.push(robot_id)
-    end
-end
-=end
 
 class Token
     attr_accessor :value, :origin_type, :origin, :dest_type, :dest
@@ -193,8 +154,6 @@ class RobotController
                 robot = Robot.new(key)
                 @robot_map[key] = robot
             end
-
-                
 
             if token[0].value.to_i.is_a? Numeric
 
@@ -309,10 +268,6 @@ def extract_coding(str)
         return rule_fmt.match(str)
     end
 end
-
-
-
-
 
 control_center = RobotController.new()
 result = control_center.execute()
