@@ -22,7 +22,7 @@ ruby no_time_for_taxicab_test.rb
 ruby security_through_obscurity_test.rb
 ```
 
-## Day 10 (not completed)
+## Day 10
 ```
 ruby balance_bots_test.rb
 ```
